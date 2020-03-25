@@ -4,6 +4,9 @@ import { Typography, Button } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import { loadCSS } from 'fg-loadcss';
 import axios from 'axios';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import firebaseConfig from '../../firebaseConfig';
 
 export default function CardComponent() {
 	useEffect(() => {
@@ -13,9 +16,30 @@ export default function CardComponent() {
 		);
 	}, []);
 
+	firebase.initializeApp(firebaseConfig);
+
 	function handleClick(e) {
 		e.preventDefault();
-		axios.get('/signin').then(res => console.log(res.data.message));
+		var provider = new firebase.auth.GoogleAuthProvider();
+
+		firebase
+			.auth()
+			.signInWithPopup(provider)
+			.then(async result => {
+				var token = result.credential.accessToken;
+				var user = result.user;
+
+				console.log(
+					user.uid,
+					user.email,
+					user.displayName,
+					user.photoURL
+				);
+				axios.get('/signin').then(res => console.log(res.data.message));
+			})
+			.catch(err => {
+				console.log(err.code, err.message, err.email, err.credential);
+			});
 	}
 
 	return (
