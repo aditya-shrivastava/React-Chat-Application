@@ -1,26 +1,25 @@
 import React from 'react';
 import './App.css';
-import CardComponent from './Components/Card/CardComponent';
-import { Typography } from '@material-ui/core';
-import Icon from '@material-ui/core/Icon';
-import bg from './images/bg.jpg';
+import SignIn from './Components/SignIn/SiginIn';
+import ChatComponent from './Components/Chat/ChatComponent';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 
 axios.defaults.baseURL =
-	'https://asia-east2-native-chat-app-43424.cloudfunctions.net/api';
+	// 'https://asia-east2-native-chat-app-43424.cloudfunctions.net/api';
+	'http://localhost:5000/native-chat-app-43424/asia-east2/api';
 
 function App() {
 	return (
-		<div className='container'>
-			<img src={bg} alt='bg' />
-			<div className='logo'>
-				<Icon style={{ fontSize: 40 }}>whatshot</Icon>
-				<Typography variant='h4'>Chat App</Typography>
+		<Router>
+			<div>
+				<Switch>
+					<Route exact path='/' component={SignIn} />
+					<Route exact path='/chat' component={ChatComponent} />
+					<Route exact path='/profile' />
+				</Switch>
 			</div>
-			<div className='App'>
-				<CardComponent />
-			</div>
-		</div>
+		</Router>
 	);
 }
 

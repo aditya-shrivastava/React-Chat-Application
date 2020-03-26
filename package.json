@@ -40,5 +40,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://asia-east2-native-chat-app-43424.cloudfunctions.net/api"
+  "proxy": "http://localhost:5000/native-chat-app-43424/asia-east2/api"
+
 }

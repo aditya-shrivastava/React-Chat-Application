@@ -1,0 +1,34 @@
+.container img {
+    padding: 10px;
+    position: absolute;
+    z-index: -1;
+    margin: 0;
+    padding: 0;
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    padding: 10px;
+}
+
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+@media only screen and (min-width: 800px) {
+    .container img {
+        clip-path: circle(70.5% at 3% 4%);
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .container img {
+        clip-path: circle(95% at 3% 4%);
+    }
+}
