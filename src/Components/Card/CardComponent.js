@@ -32,14 +32,9 @@ class CardComponent extends Component {
 			.signInWithPopup(provider)
 			.then(async result => {
 				var user = result.user;
+				var token = result.credential.accessToken;
 
-				// console.log(
-				// 	user.uid,
-				// 	user.email,
-				// 	user.displayName,
-				// 	user.photoURL
-				// );
-
+				localStorage.setItem('TOKEN', token);
 				localStorage.setItem('ID', user.uid);
 				localStorage.setItem('DISPLAY_NAME', user.displayName);
 				localStorage.setItem('PHOTO_URL', user.photoURL);
@@ -59,7 +54,7 @@ class CardComponent extends Component {
 				<div className='header'>
 					<Typography variant='h3'>Welcome!</Typography>
 					<Typography variaint='subtitle'>
-						Welcome to your happy place
+						We are happy to have you with us
 					</Typography>
 				</div>
 				<Button

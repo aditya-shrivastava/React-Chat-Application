@@ -17,6 +17,7 @@
     "react-loading": "^2.0.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "react-shadow-scroll": "^1.0.0",
     "react-toastify": "^5.5.0"
   },
   "scripts": {
@@ -41,5 +42,4 @@
     ]
   },
   "proxy": "http://localhost:5000/native-chat-app-43424/asia-east2/api"
-
 }

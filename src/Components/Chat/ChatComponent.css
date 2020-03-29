@@ -1,0 +1,56 @@
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.title {
+    border-bottom: 1px solid #a5fce3;
+    color: white;
+    background-color: #00cec9;
+    text-align: center;
+}
+
+.chatboard {
+    display: flex;
+    flex-direction: row;
+}
+
+.userList {
+    width: 300px;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.userList::-webkit-scrollbar {
+    width: 2px;
+}
+
+.userList::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(69, 66, 243, 0.3);
+}
+
+.userList::-webkit-scrollbar-thumb {
+    background-color: darkgray;
+    outline: rgb(67, 248, 50);
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+}
+
+.user img {
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    padding-right: 5px;
+}
+
+.user:hover {
+    background-color: #81ecec;
+    border-bottom: 3px solid black;
+}

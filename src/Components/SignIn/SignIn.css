@@ -32,3 +32,15 @@
         clip-path: circle(95% at 3% 4%);
     }
 }
+
+@media only screen and (max-width: 420px) {
+    .container img {
+        display: none;
+    }
+
+    .container {
+        background-image: url('../../images/bg.jpg');
+        height: 920px;
+    }
+
+}
