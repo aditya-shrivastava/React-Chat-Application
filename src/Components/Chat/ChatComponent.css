@@ -8,13 +8,20 @@
 .title {
     border-bottom: 1px solid #a5fce3;
     color: white;
-    background-color: #00cec9;
-    text-align: center;
+    background-image: linear-gradient(to top, rgb(240, 29, 117), rgb(250, 73, 73));
+    display: flex;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 90px;
+    border-bottom-right-radius: 90px;
 }
 
 .chatboard {
     display: flex;
     flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .userList {
@@ -41,6 +48,7 @@
     flex-direction: row;
     align-items: center;
     padding: 10px;
+    border-bottom: 0.5px solid grey;
 }
 
 .user img {
@@ -50,7 +58,45 @@
     padding-right: 5px;
 }
 
-.user:hover {
-    background-color: #81ecec;
-    border-bottom: 3px solid black;
+
+.messages {
+    width: 70%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 800px;
+    border-right: 0.5px solid darkgray;
+}
+
+.input {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.textInput {
+    width: 70%;
+}
+
+.btn {
+    width: 160px;
+}
+
+.profile {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile img {
+    width: 70%;
+    height: 60%;
+    padding: 20px;
+    border-radius: 50%;
 }

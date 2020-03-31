@@ -4,18 +4,10 @@ import { Typography, Button } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import { loadCSS } from 'fg-loadcss';
 import axios from 'axios';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import firebaseConfig from '../../firebaseConfig';
+import { Firebase } from '../../Firebase';
 import { withRouter } from 'react-router-dom';
 
 class CardComponent extends Component {
-	constructor(props) {
-		super(props);
-
-		firebase.initializeApp(firebaseConfig);
-	}
-
 	componentDidMount() {
 		loadCSS(
 			'https://use.fontawesome.com/releases/v5.12.0/css/all.css',
@@ -25,10 +17,9 @@ class CardComponent extends Component {
 
 	handleClick = e => {
 		e.preventDefault();
-		var provider = new firebase.auth.GoogleAuthProvider();
+		var provider = new Firebase.auth.GoogleAuthProvider();
 
-		firebase
-			.auth()
+		Firebase.auth()
 			.signInWithPopup(provider)
 			.then(async result => {
 				var user = result.user;

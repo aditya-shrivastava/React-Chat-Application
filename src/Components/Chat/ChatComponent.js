@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import { Typography, CircularProgress } from '@material-ui/core';
+import {
+	Typography,
+	CircularProgress,
+	Button,
+	Icon,
+	TextField
+} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import './ChatComponent.css';
+import Message from '../Message/Message';
 
 export class ChatComponent extends Component {
 	constructor() {
@@ -17,7 +24,8 @@ export class ChatComponent extends Component {
 			messages: [
 				{
 					userName: '',
-					body: ''
+					body: '',
+					senderId: ''
 				}
 			],
 			users: [
@@ -38,7 +46,8 @@ export class ChatComponent extends Component {
 				res.data.forEach(element => {
 					const message = {
 						userName: element.userName,
-						body: element.body
+						body: element.body,
+						senderId: element.uid
 					};
 					this.setState({
 						messages: [...this.state.messages, message]
@@ -60,6 +69,15 @@ export class ChatComponent extends Component {
 		}
 	}
 
+	handleClick = e => {
+		e.preventDefault();
+		localStorage.removeItem('ID');
+		localStorage.removeItem('DISPLAY_NAME');
+		localStorage.removeItem('PHOTO_URL');
+		localStorage.removeItem('TOKEN');
+		this.props.history.push('/');
+	};
+
 	render() {
 		let messages = this.state.messages;
 		let users = this.state.users.filter(item => item.name !== '');
@@ -73,12 +91,16 @@ export class ChatComponent extends Component {
 		} else {
 			return (
 				<div>
-					<Typography className='title' variant='h3'>
-						Chat Room
-					</Typography>
+					<div className='title'>
+						<Icon style={{ fontSize: 40 }}>whatshot</Icon>
+						<Typography variant='h3'>Chat Room</Typography>
+					</div>
 					<div className='chatboard'>
 						<div className='userList'>
-							<Typography className='title' variant='h4'>
+							<Typography
+								style={{ textAlign: 'center' }}
+								variant='h4'
+							>
 								Users
 							</Typography>
 							{users.map((value, index) => (
@@ -92,21 +114,52 @@ export class ChatComponent extends Component {
 						</div>
 						<div className='messages'>
 							{messages.map((value, index) => (
-								<div key={index}>
-									<Typography variant='h4'>
-										{value.body}
-									</Typography>
-									<Typography value='subtitle'>
-										{value.userName}
-									</Typography>
-								</div>
+								<Message
+									senderId={value.senderId}
+									userName={value.userName}
+									uid={this.state.uid}
+									body={value.body}
+									key={index}
+								/>
 							))}
+							<div className='input'>
+								<TextField
+									className='textInput'
+									variant='outlined'
+								></TextField>
+								<Button
+									className='btn'
+									variant='contained'
+									color='primary'
+								>
+									Image
+								</Button>
+								<Button
+									variant='contained'
+									color='secondary'
+									startIcon={
+										<Icon style={{ fontSize: 30 }}>
+											send
+										</Icon>
+									}
+									className='btn'
+								>
+									Send
+								</Button>
+							</div>
 						</div>
 						<div className='profile'>
 							<img src={this.state.photoURL} alt='user' />
-							<Typography className='username' variant='h4'>
+							<Typography className='username' variant='h6'>
 								{this.state.displayName}
 							</Typography>
+							<Button
+								variant='contained'
+								color='secondary'
+								onClick={this.handleClick}
+							>
+								Logout
+							</Button>
 						</div>
 					</div>
 				</div>
