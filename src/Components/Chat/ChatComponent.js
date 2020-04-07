@@ -10,6 +10,8 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import './ChatComponent.css';
 import Message from '../Message/Message';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 export class ChatComponent extends Component {
 	constructor() {
@@ -36,36 +38,49 @@ export class ChatComponent extends Component {
 			],
 			loading: true
 		};
+
+		// setInterval(() => {
+		// this.getMessages();
+		// 	console.log('fetched');
+		// }, 5000);
 	}
+
+	getMessages = () => {
+		axios.get('/messages').then(res => {
+			let messages = [];
+			res.data.forEach(element => {
+				const message = {
+					userName: element.userName,
+					body: element.body,
+					senderId: element.uid
+				};
+				messages.push(message);
+			});
+			this.setState({
+				messages
+			});
+		});
+	};
 
 	componentDidMount() {
 		if (this.state.token === null) {
 			this.props.history.push('/');
 		} else {
-			axios.get('/messages').then(res => {
-				res.data.forEach(element => {
-					const message = {
-						userName: element.userName,
-						body: element.body,
-						senderId: element.uid
-					};
-					this.setState({
-						messages: [...this.state.messages, message]
+			this.getMessages();
+			axios
+				.get('/users')
+				.then(res => {
+					res.data.forEach(element => {
+						const user = {
+							name: element.name,
+							image: element.photoURL
+						};
+						this.setState({
+							users: [...this.state.users, user]
+						});
 					});
-				});
-			});
-			axios.get('/users').then(res => {
-				res.data.forEach(element => {
-					const user = {
-						name: element.name,
-						image: element.photoURL
-					};
-					this.setState({
-						users: [...this.state.users, user],
-						loading: false
-					});
-				});
-			});
+				})
+				.then(this.setState({ loading: false }));
 		}
 	}
 
@@ -76,6 +91,28 @@ export class ChatComponent extends Component {
 		localStorage.removeItem('PHOTO_URL');
 		localStorage.removeItem('TOKEN');
 		this.props.history.push('/');
+	};
+
+	handleChange = e => {
+		e.preventDefault();
+		let message = e.target.value;
+		this.setState({
+			message
+		});
+	};
+
+	handleSubmit = e => {
+		e.preventDefault();
+		const newMessage = {
+			userName: this.state.displayName,
+			body: this.state.message,
+			senderId: this.state.uid
+		};
+
+		this.setState({
+			messages: [...this.state.messages, newMessage],
+			message: ''
+		});
 	};
 
 	render() {
@@ -91,41 +128,52 @@ export class ChatComponent extends Component {
 		} else {
 			return (
 				<div>
-					<div className='title'>
-						<Icon style={{ fontSize: 40 }}>whatshot</Icon>
-						<Typography variant='h3'>Chat Room</Typography>
-					</div>
 					<div className='chatboard'>
 						<div className='userList'>
-							<Typography
-								style={{ textAlign: 'center' }}
-								variant='h4'
-							>
-								Users
-							</Typography>
-							{users.map((value, index) => (
-								<div className='user' key={index}>
-									<img src={value.image} alt='user' />
-									<Typography variant='h6'>
-										{value.name}
-									</Typography>
-								</div>
-							))}
+							<div className='title'>
+								<Icon style={{ fontSize: 40 }}>whatshot</Icon>
+								<Typography variant='h4'>Chat App</Typography>
+							</div>
+							<div className='logout'>
+								<Button
+									variant='contained'
+									color='secondary'
+									onClick={this.handleClick}
+								>
+									LOGOUT
+								</Button>
+							</div>
+							<div className='users'>
+								{users.map((value, index) => (
+									<div className='user' key={index}>
+										<img src={value.image} alt='user' />
+										<Typography variant='subtitle1'>
+											{value.name}
+										</Typography>
+									</div>
+								))}
+							</div>
 						</div>
-						<div className='messages'>
-							{messages.map((value, index) => (
-								<Message
-									senderId={value.senderId}
-									userName={value.userName}
-									uid={this.state.uid}
-									body={value.body}
-									key={index}
-								/>
-							))}
+						<div className='chat'>
+							<div className='messages'>
+								<PerfectScrollbar>
+									{messages.map((value, index) => (
+										<Message
+											senderId={value.senderId}
+											userName={value.userName}
+											uid={this.state.uid}
+											body={value.body}
+											key={index}
+										/>
+									))}
+								</PerfectScrollbar>
+							</div>
 							<div className='input'>
 								<TextField
+									value={this.state.message}
 									className='textInput'
 									variant='outlined'
+									onChange={this.handleChange}
 								></TextField>
 								<Button
 									className='btn'
@@ -137,6 +185,7 @@ export class ChatComponent extends Component {
 								<Button
 									variant='contained'
 									color='secondary'
+									onClick={this.handleSubmit}
 									startIcon={
 										<Icon style={{ fontSize: 30 }}>
 											send
@@ -147,19 +196,6 @@ export class ChatComponent extends Component {
 									Send
 								</Button>
 							</div>
-						</div>
-						<div className='profile'>
-							<img src={this.state.photoURL} alt='user' />
-							<Typography className='username' variant='h6'>
-								{this.state.displayName}
-							</Typography>
-							<Button
-								variant='contained'
-								color='secondary'
-								onClick={this.handleClick}
-							>
-								Logout
-							</Button>
 						</div>
 					</div>
 				</div>
