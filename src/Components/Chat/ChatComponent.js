@@ -4,7 +4,7 @@ import {
 	CircularProgress,
 	Button,
 	Icon,
-	TextField
+	TextField,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -27,37 +27,37 @@ export class ChatComponent extends Component {
 				{
 					userName: '',
 					body: '',
-					senderId: ''
-				}
+					senderId: '',
+				},
 			],
 			users: [
 				{
 					name: '',
-					image: ''
-				}
+					image: '',
+				},
 			],
-			loading: true
+			loading: true,
 		};
 
 		// setInterval(() => {
-		// this.getMessages();
+		// 	this.getMessages();
 		// 	console.log('fetched');
-		// }, 5000);
+		// }, 2000);
 	}
 
 	getMessages = () => {
-		axios.get('/messages').then(res => {
+		axios.get('/messages').then((res) => {
 			let messages = [];
-			res.data.forEach(element => {
+			res.data.forEach((element) => {
 				const message = {
 					userName: element.userName,
 					body: element.body,
-					senderId: element.uid
+					senderId: element.uid,
 				};
 				messages.push(message);
 			});
 			this.setState({
-				messages
+				messages,
 			});
 		});
 	};
@@ -67,24 +67,22 @@ export class ChatComponent extends Component {
 			this.props.history.push('/');
 		} else {
 			this.getMessages();
-			axios
-				.get('/users')
-				.then(res => {
-					res.data.forEach(element => {
-						const user = {
-							name: element.name,
-							image: element.photoURL
-						};
-						this.setState({
-							users: [...this.state.users, user]
-						});
+			axios.get('/users').then((res) => {
+				res.data.forEach((element) => {
+					const user = {
+						name: element.name,
+						image: element.photoURL,
+					};
+					this.setState({
+						users: [...this.state.users, user],
 					});
-				})
-				.then(this.setState({ loading: false }));
+				});
+				this.setState({ loading: false });
+			});
 		}
 	}
 
-	handleClick = e => {
+	handleClick = (e) => {
 		e.preventDefault();
 		localStorage.removeItem('ID');
 		localStorage.removeItem('DISPLAY_NAME');
@@ -93,31 +91,35 @@ export class ChatComponent extends Component {
 		this.props.history.push('/');
 	};
 
-	handleChange = e => {
+	handleChange = (e) => {
 		e.preventDefault();
 		let message = e.target.value;
 		this.setState({
-			message
+			message,
 		});
 	};
 
-	handleSubmit = e => {
+	handleSubmit = (e) => {
 		e.preventDefault();
 		const newMessage = {
 			userName: this.state.displayName,
 			body: this.state.message,
-			senderId: this.state.uid
+			senderId: this.state.uid,
 		};
+
+		axios.post('/message', newMessage).then((res) => {
+			console.log(res);
+		});
 
 		this.setState({
 			messages: [...this.state.messages, newMessage],
-			message: ''
+			message: '',
 		});
 	};
 
 	render() {
 		let messages = this.state.messages;
-		let users = this.state.users.filter(item => item.name !== '');
+		let users = this.state.users.filter((item) => item.name !== '');
 		if (this.state.loading) {
 			return (
 				<div className='loading'>
