@@ -12,6 +12,8 @@ import './ChatComponent.css';
 import Message from '../Message/Message';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import ImageUpload from '../Upload/ImageUpload';
+import Popup from 'reactjs-popup';
 
 export class ChatComponent extends Component {
 	constructor() {
@@ -28,6 +30,7 @@ export class ChatComponent extends Component {
 					userName: '',
 					body: '',
 					senderId: '',
+					imageUrl: '',
 				},
 			],
 			users: [
@@ -53,6 +56,7 @@ export class ChatComponent extends Component {
 					userName: element.userName,
 					body: element.body,
 					senderId: element.uid,
+					imageUrl: element.imageUrl,
 				};
 				messages.push(message);
 			});
@@ -101,6 +105,9 @@ export class ChatComponent extends Component {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
+		if (this.state.message.trim() === '') {
+			return;
+		}
 		const newMessage = {
 			userName: this.state.displayName,
 			body: this.state.message,
@@ -177,13 +184,20 @@ export class ChatComponent extends Component {
 									variant='outlined'
 									onChange={this.handleChange}
 								></TextField>
-								<Button
-									className='btn'
-									variant='contained'
-									color='primary'
+								<Popup
+									modal
+									trigger={
+										<Button
+											variant='contained'
+											color='primary'
+											className='btn'
+										>
+											Image
+										</Button>
+									}
 								>
-									Image
-								</Button>
+									<ImageUpload />
+								</Popup>
 								<Button
 									variant='contained'
 									color='secondary'

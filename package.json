@@ -20,7 +20,8 @@
     "react-scripts": "3.4.0",
     "react-scrollbar": "^0.5.6",
     "react-shadow-scroll": "^1.0.0",
-    "react-toastify": "^5.5.0"
+    "react-toastify": "^5.5.0",
+    "reactjs-popup": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",

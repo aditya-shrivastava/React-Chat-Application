@@ -88,7 +88,13 @@
     width: 80%;
 }
 
+.imageInput {
+    width: 160px;
+    overflow: hidden
+}
+
 .btn {
     width: 160px;
 }
+
 
