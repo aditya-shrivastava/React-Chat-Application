@@ -42,10 +42,10 @@ export class ChatComponent extends Component {
 			loading: true,
 		};
 
-		// setInterval(() => {
-		// 	this.getMessages();
-		// 	console.log('fetched');
-		// }, 2000);
+		this.msgTimer = setInterval(() => {
+			this.getMessages();
+			console.log('fetched');
+		}, 3000);
 	}
 
 	getMessages = () => {
@@ -66,7 +66,7 @@ export class ChatComponent extends Component {
 		});
 	};
 
-	componentDidMount() {
+	componentDidMount = () => {
 		if (this.state.token === null) {
 			this.props.history.push('/');
 		} else {
@@ -84,7 +84,7 @@ export class ChatComponent extends Component {
 				this.setState({ loading: false });
 			});
 		}
-	}
+	};
 
 	handleClick = (e) => {
 		e.preventDefault();
@@ -122,6 +122,10 @@ export class ChatComponent extends Component {
 			messages: [...this.state.messages, newMessage],
 			message: '',
 		});
+	};
+
+	componentWillUnmount = () => {
+		clearInterval(this.msgTimer);
 	};
 
 	render() {
