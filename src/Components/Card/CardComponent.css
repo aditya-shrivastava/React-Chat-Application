@@ -16,6 +16,13 @@
     border-radius: 10px;
 }
 
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 
 @media only screen and (max-width: 420px) {
     .card {

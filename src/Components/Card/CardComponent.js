@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './CardComponent.css';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, CircularProgress } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import { loadCSS } from 'fg-loadcss';
 import axios from 'axios';
@@ -8,6 +8,13 @@ import { Firebase } from '../../Firebase';
 import { withRouter } from 'react-router-dom';
 
 class CardComponent extends Component {
+	constructor() {
+		super();
+		this.state = {
+			isLoading: false,
+		};
+	}
+
 	componentDidMount() {
 		loadCSS(
 			'https://use.fontawesome.com/releases/v5.12.0/css/all.css',
@@ -15,13 +22,13 @@ class CardComponent extends Component {
 		);
 	}
 
-	handleClick = e => {
+	handleClick = (e) => {
 		e.preventDefault();
 		var provider = new Firebase.auth.GoogleAuthProvider();
 
 		Firebase.auth()
 			.signInWithPopup(provider)
-			.then(async result => {
+			.then(async (result) => {
 				var user = result.user;
 				var token = result.credential.accessToken;
 
@@ -29,36 +36,45 @@ class CardComponent extends Component {
 				localStorage.setItem('ID', user.uid);
 				localStorage.setItem('DISPLAY_NAME', user.displayName);
 				localStorage.setItem('PHOTO_URL', user.photoURL);
-				axios.post('/signin', user).then(res => {
+				axios.post('/signin', user).then((res) => {
 					console.log(res.data.message);
 					this.props.history.push('/chat');
 				});
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err.code, err.message, err.email, err.credential);
 			});
 	};
 
 	render() {
-		return (
-			<div className='card'>
-				<div className='header'>
-					<Typography variant='h3'>Welcome!</Typography>
-					<Typography variaint='subtitle'>
-						We are happy to have you with us
-					</Typography>
+		if (this.state.isLoading) {
+			return (
+				<div className='loading'>
+					<CircularProgress color='secondary' />
+					<Typography variant='h4'>Loading...</Typography>
 				</div>
-				<Button
-					startIcon={<Icon className='fab fa-google' />}
-					variant='contained'
-					color='secondary'
-					size='large'
-					onClick={this.handleClick}
-				>
-					SignIn With Google
-				</Button>
-			</div>
-		);
+			);
+		} else {
+			return (
+				<div className='card'>
+					<div className='header'>
+						<Typography variant='h3'>Welcome!</Typography>
+						<Typography variaint='subtitle'>
+							We are happy to have you with us
+						</Typography>
+					</div>
+					<Button
+						startIcon={<Icon className='fab fa-google' />}
+						variant='contained'
+						color='secondary'
+						size='large'
+						onClick={this.handleClick}
+					>
+						SignIn With Google
+					</Button>
+				</div>
+			);
+		}
 	}
 }
 
