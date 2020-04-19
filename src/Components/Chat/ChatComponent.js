@@ -5,6 +5,7 @@ import {
 	Button,
 	Icon,
 	TextField,
+	Tooltip,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -12,7 +13,6 @@ import './ChatComponent.css';
 import Message from '../Message/Message';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import ImageUpload from '../Upload/ImageUpload';
 import Popup from 'reactjs-popup';
 
 export class ChatComponent extends Component {
@@ -42,10 +42,10 @@ export class ChatComponent extends Component {
 			loading: true,
 		};
 
-		this.msgTimer = setInterval(() => {
-			this.getMessages();
-			console.log('fetched');
-		}, 3000);
+		// this.msgTimer = setInterval(() => {
+		// 	this.getMessages();
+		// 	console.log('fetched');
+		// }, 3000);
 	}
 
 	getMessages = () => {
@@ -196,12 +196,10 @@ export class ChatComponent extends Component {
 											color='primary'
 											className='btn'
 										>
-											Image
+											UPLOAD
 										</Button>
 									}
-								>
-									<ImageUpload />
-								</Popup>
+								></Popup>
 								<Button
 									variant='contained'
 									color='secondary'

@@ -84,6 +84,17 @@
     padding: 5px;
 }
 
+.fileSelect {
+    border-radius: 10%;
+    border: none;
+    background-color: rgb(23, 240, 70);
+    color: white;
+}
+
+.fileSelect:hover {
+    cursor: pointer;
+}
+
 .textInput {
     width: 80%;
 }
