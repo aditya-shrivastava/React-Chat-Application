@@ -76,23 +76,35 @@
     overflow-y: scroll;
 }
 
+.displayFile {
+    width: 600px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    align-items: center;
+    top: 10%;
+    right: 10%;
+}
+
+.actionButton {
+    width: 400px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.displayFile img {
+    width: 500px;
+    height: 600px;
+}
+
 .input {
     display: flex;
     width: 100%;
     display: flex;
     flex-direction: row;
     padding: 5px;
-}
-
-.fileSelect {
-    border-radius: 10%;
-    border: none;
-    background-color: rgb(23, 240, 70);
-    color: white;
-}
-
-.fileSelect:hover {
-    cursor: pointer;
 }
 
 .textInput {

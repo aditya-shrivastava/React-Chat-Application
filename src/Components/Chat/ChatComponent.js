@@ -5,7 +5,6 @@ import {
 	Button,
 	Icon,
 	TextField,
-	Tooltip,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -13,7 +12,6 @@ import './ChatComponent.css';
 import Message from '../Message/Message';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Popup from 'reactjs-popup';
 
 export class ChatComponent extends Component {
 	constructor() {
@@ -40,6 +38,8 @@ export class ChatComponent extends Component {
 				},
 			],
 			loading: true,
+			selectedFile: null,
+			fileUrl: '',
 		};
 
 		// this.msgTimer = setInterval(() => {
@@ -128,6 +128,35 @@ export class ChatComponent extends Component {
 		clearInterval(this.msgTimer);
 	};
 
+	handleFileChange = (e) => {
+		e.preventDefault();
+		let fileUrl = URL.createObjectURL(e.target.files[0]);
+		this.setState({
+			selectedFile: e.target.files[0],
+			fileUrl,
+		});
+	};
+
+	handleFileUpload = () => {
+		const data = new FormData();
+		data.append(
+			'media',
+			this.state.selectedFile,
+			this.state.selectedFile.name
+		);
+		axios.post('/media', data).then((res) => {
+			console.log(res);
+			this.cancelUpload();
+		});
+	};
+
+	cancelUpload = () => {
+		this.setState({
+			selectedFile: null,
+			fileUrl: '',
+		});
+	};
+
 	render() {
 		let messages = this.state.messages;
 		let users = this.state.users.filter((item) => item.name !== '');
@@ -181,6 +210,27 @@ export class ChatComponent extends Component {
 									))}
 								</PerfectScrollbar>
 							</div>
+							{this.state.selectedFile !== null ? (
+								<div className='displayFile'>
+									<img src={this.state.fileUrl} alt='file' />
+									<div className='actionButton'>
+										<Button
+											variant='outlined'
+											color='secondary'
+											onClick={this.cancelUpload}
+										>
+											Cancel
+										</Button>
+										<Button
+											variant='contained'
+											color='secondary'
+											onClick={this.handleFileUpload}
+										>
+											Upload
+										</Button>
+									</div>
+								</div>
+							) : null}
 							<div className='input'>
 								<TextField
 									value={this.state.message}
@@ -188,18 +238,27 @@ export class ChatComponent extends Component {
 									variant='outlined'
 									onChange={this.handleChange}
 								></TextField>
-								<Popup
-									modal
-									trigger={
-										<Button
-											variant='contained'
-											color='primary'
-											className='btn'
-										>
-											UPLOAD
-										</Button>
+								<input
+									type='file'
+									style={{ display: 'none' }}
+									onChange={this.handleFileChange}
+									ref={(fileInput) =>
+										(this.fileInput = fileInput)
 									}
-								></Popup>
+								/>
+								<Button
+									variant='contained'
+									color='primary'
+									className='btn'
+									onClick={() => this.fileInput.click()}
+									startIcon={
+										<Icon style={{ fontSize: 30 }}>
+											queue
+										</Icon>
+									}
+								>
+									Media
+								</Button>
 								<Button
 									variant='contained'
 									color='secondary'
