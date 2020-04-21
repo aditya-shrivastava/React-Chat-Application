@@ -3,16 +3,9 @@ import './Message.css';
 import { Typography } from '@material-ui/core';
 
 class Message extends Component {
-	constructor() {
-		super();
-
-		this.state = {
-			flag: false
-		};
-	}
-
 	render() {
 		let userName = this.props.userName;
+		let type = this.props.type;
 		let body = this.props.body;
 		return (
 			<div
@@ -23,9 +16,14 @@ class Message extends Component {
 						: { alignItems: 'flex-start' }
 				}
 			>
-				<Typography className='body' variant='h6'>
-					{body}
-				</Typography>
+				{type === 'text' ? (
+					<Typography className='body' variant='h6'>
+						{body}
+					</Typography>
+				) : (
+					<img className='body' src={body} alt='media' />
+				)}
+
 				<Typography value='subtitle2'>{userName}</Typography>
 			</div>
 		);
