@@ -139,11 +139,6 @@ export class ChatComponent extends Component {
 	};
 
 	handleFileUpload = () => {
-		const mediaMessage = {
-			userName: this.state.displayName,
-			senderId: this.state.uid,
-			type: 'media',
-		};
 		const fd = new FormData();
 		fd.append(
 			'file',
@@ -151,8 +146,22 @@ export class ChatComponent extends Component {
 			this.state.selectedFile.name
 		);
 		axios.post('/media', fd).then((res) => {
-			console.log(res);
-			// this.cancelUpload();
+			const mediaMessage = {
+				userName: this.state.displayName,
+				body: res.data,
+				senderId: this.state.uid,
+				type: 'media',
+			};
+
+			axios.post('/message', mediaMessage).then((res) => {
+				console.log(res);
+			});
+
+			this.setState({
+				messages: [...this.state.messages, mediaMessage],
+				selectedFile: null,
+				fileUrl: '',
+			});
 		});
 	};
 
