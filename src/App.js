@@ -6,8 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 
 axios.defaults.baseURL =
-	// 'https://asia-east2-native-chat-app-43424.cloudfunctions.net/api';
-	'http://localhost:5000/native-chat-app-43424/asia-east2/api';
+	'https://asia-east2-native-chat-app-43424.cloudfunctions.net/api';
 
 function App() {
 	return (
