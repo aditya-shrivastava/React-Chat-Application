@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Message.css';
 import { Typography } from '@material-ui/core';
+import ReactPlayer from 'react-player';
 
 class Message extends Component {
 	render() {
@@ -20,8 +21,17 @@ class Message extends Component {
 					<Typography className='body' variant='h6'>
 						{body}
 					</Typography>
-				) : (
+				) : type === 'image' ? (
 					<img className='body' src={body} alt='media' />
+				) : (
+					<div className='body'>
+						<ReactPlayer
+							url={body}
+							width='500px'
+							height='500px'
+							controls={true}
+						/>
+					</div>
 				)}
 
 				<Typography value='subtitle2'>{userName}</Typography>
