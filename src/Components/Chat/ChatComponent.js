@@ -12,10 +12,17 @@ import './ChatComponent.css';
 import Message from '../Message/Message';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import ReactPlayer from 'react-player';
+import IdleTimer from 'react-idle-timer';
 
 export class ChatComponent extends Component {
 	constructor() {
 		super();
+
+		this.idleTimer = null;
+		this.onAction = this._onAction.bind(this);
+		this.onActive = this._onActive.bind(this);
+		this.onIdle = this._onIdle.bind(this);
 
 		this.state = {
 			uid: localStorage.getItem('ID'),
@@ -40,12 +47,12 @@ export class ChatComponent extends Component {
 			loading: true,
 			selectedFile: null,
 			fileUrl: '',
+			mediaType: '',
 		};
 
-		// this.msgTimer = setInterval(() => {
-		// 	this.getMessages();
-		// 	console.log('fetched');
-		// }, 3000);
+		this.msgTimer = setInterval(() => {
+			this.getUnreadMessages();
+		}, 5000);
 	}
 
 	getMessages = () => {
@@ -62,6 +69,23 @@ export class ChatComponent extends Component {
 			});
 			this.setState({
 				messages,
+			});
+		});
+	};
+
+	getUnreadMessages = () => {
+		axios.get('/new').then((res) => {
+			let messages = [];
+			res.data.forEach((element) => {
+				const message = {
+					userName: element.userName,
+					body: element.body,
+					senderId: element.uid,
+					type: element.type,
+				};
+				this.setState({
+					messages: [...this.state.messages, message],
+				});
 			});
 		});
 	};
@@ -87,7 +111,6 @@ export class ChatComponent extends Component {
 	};
 
 	handleClick = (e) => {
-		e.preventDefault();
 		localStorage.removeItem('ID');
 		localStorage.removeItem('DISPLAY_NAME');
 		localStorage.removeItem('PHOTO_URL');
@@ -115,9 +138,7 @@ export class ChatComponent extends Component {
 			type: 'text',
 		};
 
-		axios.post('/message', textMessage).then((res) => {
-			console.log(res);
-		});
+		axios.post('/message', textMessage);
 
 		this.setState({
 			messages: [...this.state.messages, textMessage],
@@ -131,10 +152,12 @@ export class ChatComponent extends Component {
 
 	handleFileChange = (e) => {
 		e.preventDefault();
+		let type = e.target.files[0].type.split('/')[0];
 		let fileUrl = URL.createObjectURL(e.target.files[0]);
 		this.setState({
 			selectedFile: e.target.files[0],
 			fileUrl,
+			mediaType: type,
 		});
 	};
 
@@ -148,9 +171,9 @@ export class ChatComponent extends Component {
 		axios.post('/media', fd).then((res) => {
 			const mediaMessage = {
 				userName: this.state.displayName,
-				body: res.data,
+				body: res.data.mediaUrl,
 				senderId: this.state.uid,
-				type: 'media',
+				type: this.state.mediaType,
 			};
 
 			axios.post('/message', mediaMessage).then((res) => {
@@ -161,6 +184,7 @@ export class ChatComponent extends Component {
 				messages: [...this.state.messages, mediaMessage],
 				selectedFile: null,
 				fileUrl: '',
+				mediaType: '',
 			});
 		});
 	};
@@ -169,6 +193,7 @@ export class ChatComponent extends Component {
 		this.setState({
 			selectedFile: null,
 			fileUrl: '',
+			mediaType: '',
 		});
 	};
 
@@ -185,6 +210,17 @@ export class ChatComponent extends Component {
 		} else {
 			return (
 				<div>
+					<IdleTimer
+						ref={(ref) => {
+							this.idleTimer = ref;
+						}}
+						element={document}
+						onActive={this.onActive}
+						onIdle={this.onIdle}
+						onAction={this.onAction}
+						debounce={250}
+						timeout={1800000}
+					/>
 					<div className='chatboard'>
 						<div className='userList'>
 							<div className='title'>
@@ -228,7 +264,19 @@ export class ChatComponent extends Component {
 							</div>
 							{this.state.selectedFile !== null ? (
 								<div className='displayFile'>
-									<img src={this.state.fileUrl} alt='file' />
+									{this.state.mediaType === 'image' ? (
+										<img
+											src={this.state.fileUrl}
+											alt='file'
+										/>
+									) : (
+										<ReactPlayer
+											url={this.state.fileUrl}
+											width='500px'
+											height='500px'
+											controls={true}
+										/>
+									)}
 									<div className='actionButton'>
 										<Button
 											variant='outlined'
@@ -256,6 +304,7 @@ export class ChatComponent extends Component {
 								></TextField>
 								<input
 									type='file'
+									accept='image/*, video/*'
 									style={{ display: 'none' }}
 									onChange={this.handleFileChange}
 									ref={(fileInput) =>
@@ -294,6 +343,14 @@ export class ChatComponent extends Component {
 				</div>
 			);
 		}
+	}
+
+	_onAction(e) {}
+
+	_onActive(e) {}
+
+	_onIdle(e) {
+		this.handleClick();
 	}
 }
 

@@ -37,7 +37,6 @@ class CardComponent extends Component {
 				localStorage.setItem('DISPLAY_NAME', user.displayName);
 				localStorage.setItem('PHOTO_URL', user.photoURL);
 				axios.post('/signin', user).then((res) => {
-					console.log(res.data.message);
 					this.props.history.push('/chat');
 				});
 			})
