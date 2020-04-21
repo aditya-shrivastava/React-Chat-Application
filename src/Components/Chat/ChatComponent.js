@@ -179,7 +179,7 @@ export class ChatComponent extends Component {
 	};
 
 	render() {
-		let messages = this.state.messages;
+		let messages = this.state.messages.filter((item) => item.body !== '');
 		let users = this.state.users.filter((item) => item.name !== '');
 		if (this.state.loading) {
 			return (
