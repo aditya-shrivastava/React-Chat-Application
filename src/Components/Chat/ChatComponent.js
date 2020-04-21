@@ -75,7 +75,6 @@ export class ChatComponent extends Component {
 
 	getUnreadMessages = () => {
 		axios.get('/new').then((res) => {
-			let messages = [];
 			res.data.forEach((element) => {
 				const message = {
 					userName: element.userName,
