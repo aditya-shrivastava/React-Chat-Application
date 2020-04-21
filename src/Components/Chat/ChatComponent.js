@@ -51,7 +51,7 @@ export class ChatComponent extends Component {
 		};
 
 		this.msgTimer = setInterval(() => {
-			this.getUnreadMessages();
+			this.getMessages();
 		}, 5000);
 	}
 
@@ -69,22 +69,6 @@ export class ChatComponent extends Component {
 			});
 			this.setState({
 				messages,
-			});
-		});
-	};
-
-	getUnreadMessages = () => {
-		axios.get('/new').then((res) => {
-			res.data.forEach((element) => {
-				const message = {
-					userName: element.userName,
-					body: element.body,
-					senderId: element.uid,
-					type: element.type,
-				};
-				this.setState({
-					messages: [...this.state.messages, message],
-				});
 			});
 		});
 	};
@@ -175,9 +159,7 @@ export class ChatComponent extends Component {
 				type: this.state.mediaType,
 			};
 
-			axios.post('/message', mediaMessage).then((res) => {
-				console.log(res);
-			});
+			axios.post('/message', mediaMessage);
 
 			this.setState({
 				messages: [...this.state.messages, mediaMessage],
