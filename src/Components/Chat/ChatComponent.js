@@ -11,7 +11,6 @@ import axios from 'axios';
 import './ChatComponent.css';
 import Message from '../Message/Message';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import ReactPlayer from 'react-player';
 import IdleTimer from 'react-idle-timer';
 
@@ -52,6 +51,7 @@ export class ChatComponent extends Component {
 
 		this.msgTimer = setInterval(() => {
 			this.getMessages();
+			this.updateScroll();
 		}, 5000);
 	}
 
@@ -178,6 +178,13 @@ export class ChatComponent extends Component {
 		});
 	};
 
+	updateScroll = () => {
+		if (!this.state.scrolled) {
+			var element = document.getElementById('scroller');
+			element.scrollTop = element.scrollHeight;
+		}
+	};
+
 	render() {
 		let messages = this.state.messages.filter((item) => item.body !== '');
 		let users = this.state.users.filter((item) => item.name !== '');
@@ -229,19 +236,17 @@ export class ChatComponent extends Component {
 							</div>
 						</div>
 						<div className='chat'>
-							<div className='messages'>
-								<PerfectScrollbar>
-									{messages.map((value, index) => (
-										<Message
-											senderId={value.senderId}
-											userName={value.userName}
-											uid={this.state.uid}
-											body={value.body}
-											type={value.type}
-											key={index}
-										/>
-									))}
-								</PerfectScrollbar>
+							<div id='scroller' className='messages'>
+								{messages.map((value, index) => (
+									<Message
+										senderId={value.senderId}
+										userName={value.userName}
+										uid={this.state.uid}
+										body={value.body}
+										type={value.type}
+										key={index}
+									/>
+								))}
 							</div>
 							{this.state.selectedFile !== null ? (
 								<div className='displayFile'>
@@ -260,15 +265,21 @@ export class ChatComponent extends Component {
 									)}
 									<div className='actionButton'>
 										<Button
-											variant='outlined'
-											color='secondary'
+											variant='contained'
+											style={{
+												backgroundColor: 'red',
+												color: 'white',
+											}}
 											onClick={this.cancelUpload}
 										>
 											Cancel
 										</Button>
 										<Button
 											variant='contained'
-											color='secondary'
+											style={{
+												backgroundColor: 'green',
+												color: 'white',
+											}}
 											onClick={this.handleFileUpload}
 										>
 											Upload
