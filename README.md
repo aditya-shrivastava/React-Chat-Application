@@ -1,3 +1,9 @@
+## React + Firebase Chat Application
+This is a fully functioning group chat application where one can sign in with their google accounts and send text and media messages.
+
+### Backend Firebase Functions Repository: 
+https://github.com/Aditya-Shrivastava/Chat-App-Functions
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
