@@ -13,7 +13,7 @@ First clone the cloud functions repository.
 Then run the following commands in the terminal.
 ```
 git clone https://github.com/Aditya-Shrivastava/React-Chat-Application
-cd React-Chat-Applications
+cd React-Chat-Application
 npm install
 npm run
 ```
