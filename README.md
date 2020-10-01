@@ -1,3 +1,4 @@
+## See https://firebase.google.com/ to know more about firebase
 ## React + Firebase Chat Application
 This is a fully functioning group chat application where one can sign in with their google accounts and send text and media messages.
 
